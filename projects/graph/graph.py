@@ -17,12 +17,12 @@ class Graph:
         if vertex not in self.vertices:
             self.vertices[vertex] = set()
         else:
-            print("Warning, vertex does exist")
+            print("Warning, already exists")
 
     def add_edge(self, vertex_from, vertex_to):
         """
         Add a directed edge to the graph.
-        TODO: Confim intest in direction should be from V1 to V2
+        TODO: Confirm intest if direction should be from V1 to V2
         """
         if vertex_from in self.vertices and vertex_to in self.vertices:
             self.vertices[vertex_from].add(vertex_to)
@@ -71,7 +71,7 @@ class Graph:
             # If that vertex has not been visited...
             if vertex not in visited:
                 # Mark it as visited...
-                # print(vertex)
+                print(vertex)
                 visited.add(vertex)
                 # Then add all of its neighbors to the top of the stack
                 for next_vertex in self.vertices[vertex]:
@@ -79,13 +79,20 @@ class Graph:
 
         print(f"DFT {visited}")
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited=[]):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        pass  # TODO
+
+        visited.append(starting_vertex)
+        # print(starting_vertex)
+        for child_vert in self.vertices[starting_vertex]:
+            if child_vert not in visited:
+                self.dft_recursive(child_vert, visited)
+
+        return visited
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -93,7 +100,29 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        q = Queue()
+
+        q.enqueue([starting_vertex])
+
+        # We already found our starting since we manually enqueued it.
+        found = []
+
+        path = []
+
+        while q.size() > 0:
+            path = q.dequeue()
+            v = path[-1]
+
+            if v not in found:
+                if v == destination_vertex:
+                    return path
+                found.append(v)
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    q.enqueue(new_path)
+
+        return None
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -101,7 +130,29 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
+
+        s.push([starting_vertex])
+
+        # We already found our starting since we manually enqueued it.
+        found = []
+
+        path = []
+
+        while s.size() > 0:
+            path = s.pop()
+            v = path[-1]
+
+            if v not in found:
+                if v == destination_vertex:
+                    return path
+                found.append(v)
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    s.push(new_path)
+
+        return None
 
 
 if __name__ == '__main__':
