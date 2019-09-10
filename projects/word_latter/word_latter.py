@@ -37,6 +37,15 @@ from graph import Graph
 import sys
 
 word_graph = Graph()
-f = open("words.txt", "r")
 starting_word = sys.argv[1]
 goal_word = sys.argv[2]
+f = open("words.txt", "r")
+
+print(len(starting_word))
+
+for line in f:
+    word = line.split()[0]
+    if len(word) == len(starting_word):
+        if word == starting_word:
+            continue
+        word_graph.add_vertex(word)
