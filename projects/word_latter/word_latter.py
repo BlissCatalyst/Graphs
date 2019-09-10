@@ -31,3 +31,12 @@
 # if we do a BFS from BeginWord to EndWord
 # the resulting path will be
 # transformation sequence
+
+from util import Queue
+from graph import Graph
+import sys
+
+word_graph = Graph()
+f = open("words.txt", "r")
+starting_word = sys.argv[1]
+goal_word = sys.argv[2]
