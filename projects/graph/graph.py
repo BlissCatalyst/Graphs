@@ -70,13 +70,20 @@ class Graph:
                 for next_vert in self.vertices[v]:
                     s.push(next_vert)
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited=None):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        pass  # TODO
+        if visited is None:
+            visited = set()
+
+            visited.add(starting_vertex)
+            print(starting_vertex)
+            for child_vert in self.vertices[starting_vertex]:
+                if child_vert not in visited:
+                    self.dft_recursive(child_vert, visited)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -84,7 +91,38 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        # q = Queue()
+        # visited = set()
+        # q.enqueue(starting_vertex)
+
+        # print("Starting BFT")
+
+        # while q.size() > 0:
+        #   current = q.dequeue()
+        #   if current not in visited:
+        #     print(current)
+        #     visited.add(current)
+        #     for next_vert in self.vertices[current]:
+        #       q.enqueue(next_vert)
+
+        q = Queue()
+        visited = set()
+        q.enqueue([starting_vertex])
+
+        while q.size() > 0:
+            path = q.dequeue()
+            current = path[-1]
+            if current not in visited:
+                if current == destination_vertex:
+                    return path
+                visited.add(current)
+                for next_vert in self.vertices[current]:
+                    # Want to be able to return to the preview spot in the original array.
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    q.enqueue(new_path)
+
+        return "Value not found"
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -92,7 +130,22 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
+        visited = set()
+        s.push([starting_vertex])
+
+        while s.size() > 0:
+            path = s.pop()
+            current = path[-1]
+            if current not in visited:
+                if current == destination_vertex:
+                    return "DFS:path" + str(path)
+                visited.add(current)
+                for next_vert in self.vertices[current]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    s.push(new_path)
+        return "DFS: Value not found"
 
 
 if __name__ == '__main__':
