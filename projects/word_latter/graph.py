@@ -116,6 +116,7 @@ class Graph:
                 if current == destination_vertex:
                     return path
                 visited.add(current)
+                # Looks at the neighbors.
                 for next_vert in self.vertices[current]:
                     # Want to be able to return to the preview spot in the original array.
                     new_path = list(path)
