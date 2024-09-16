@@ -3,56 +3,156 @@ Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
 
+
 class Graph:
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
+
     def __init__(self):
         self.vertices = {}
+
     def add_vertex(self, vertex):
         """
         Add a vertex to the graph.
         """
-        pass  # TODO
-    def add_edge(self, v1, v2):
+        if vertex not in self.vertices:
+            self.vertices[vertex] = set()
+        else:
+            print("Warning, already exists")
+
+    def add_edge(self, vertex_from, vertex_to):
         """
         Add a directed edge to the graph.
+        TODO: Confirm intest if direction should be from V1 to V2
         """
-        pass  # TODO
+        if vertex_from in self.vertices and vertex_to in self.vertices:
+            self.vertices[vertex_from].add(vertex_to)
+        else:
+            print("Warning, supplied vertex does not exist!")
+
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        q = Queue()
+
+        q.enqueue(starting_vertex)
+
+        # We already found our starting since we manually enqueued it.
+        found = [starting_vertex, ]
+
+        while q.size() > 0:
+            for vertex in self.vertices[q.queue[0]]:
+                if vertex not in found:
+                    q.enqueue(vertex)
+                    found.append(vertex)
+            q.dequeue()
+            # TODO: Format this more nicely
+
+        print(f"BFT {found}")
+
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
-    def dft_recursive(self, starting_vertex):
+        s = Stack()
+
+        s.push(starting_vertex)
+
+        # We already found our starting since we manually enqueued it.
+        # Create a Set to store visited vertices
+        visited = set()
+
+        # While the stack is not empty...
+        while s.size() > 0:
+            # Pop the first vertex
+            vertex = s.pop()
+            # If that vertex has not been visited...
+            if vertex not in visited:
+                # Mark it as visited...
+                print(vertex)
+                visited.add(vertex)
+                # Then add all of its neighbors to the top of the stack
+                for next_vertex in self.vertices[vertex]:
+                    s.push(next_vertex)
+
+        print(f"DFT {visited}")
+
+    def dft_recursive(self, starting_vertex, visited=[]):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         This should be done using recursion.
         """
-        pass  # TODO
+
+        visited.append(starting_vertex)
+        # print(starting_vertex)
+        for child_vert in self.vertices[starting_vertex]:
+            if child_vert not in visited:
+                self.dft_recursive(child_vert, visited)
+
+        return visited
+
     def bfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        q = Queue()
+
+        q.enqueue([starting_vertex])
+
+        # We already found our starting since we manually enqueued it.
+        found = []
+
+        path = []
+
+        while q.size() > 0:
+            path = q.dequeue()
+            v = path[-1]
+
+            if v not in found:
+                if v == destination_vertex:
+                    return path
+                found.append(v)
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    q.enqueue(new_path)
+
+        return None
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
 
+        s.push([starting_vertex])
 
+        # We already found our starting since we manually enqueued it.
+        found = []
 
+        path = []
+
+        while s.size() > 0:
+            path = s.pop()
+            v = path[-1]
+
+            if v not in found:
+                if v == destination_vertex:
+                    return path
+                found.append(v)
+                for next_vert in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vert)
+                    s.push(new_path)
+
+        return None
 
 
 if __name__ == '__main__':
